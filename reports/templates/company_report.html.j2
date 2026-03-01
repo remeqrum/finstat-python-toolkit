@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+<meta charset="utf-8">
+<title>Benchmark report — {{ nazov }}</title>
+<style>
+  body { font-family: "Segoe UI", Arial, sans-serif; max-width: 960px; margin: 2em auto; color: #222; }
+  h1 { border-bottom: 2px solid #4C72B0; padding-bottom: .3em; }
+  h2 { color: #4C72B0; margin-top: 1.6em; }
+  table { border-collapse: collapse; width: 100%; margin: .5em 0 1.5em; }
+  th, td { padding: .45em .8em; border-bottom: 1px solid #ddd; text-align: left; }
+  th { background: #f4f6fa; }
+  td.num { text-align: right; font-variant-numeric: tabular-nums; }
+  .pos-pod { color: #c44e52; }
+  .pos-nad { color: #55a868; }
+  .pos-stred { color: #555; }
+  .meta { color: #666; font-size: .9em; }
+  .footer { margin-top: 3em; padding-top: 1em; border-top: 1px solid #ddd; color: #888; font-size: .8em; }
+</style>
+</head>
+<body>
+<h1>{{ nazov }}</h1>
+<p class="meta">
+  IČO {{ ico }}
+  {% if dic %}· DIČ {{ dic }}{% endif %}
+  · {{ odvetvie }} · {{ kraj }}
+  {% if pravna_forma %}· {{ pravna_forma }}{% endif %}
+</p>
+
+<h2>Finančné ukazovatele a porovnanie s odvetvím</h2>
+<table>
+  <thead>
+    <tr>
+      <th>Ukazovateľ</th>
+      <th>Firma</th>
+      <th>Medián odvetvia</th>
+      <th>Q25</th>
+      <th>Q75</th>
+      <th>Pozícia</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for r in rows %}
+    <tr>
+      <td>{{ r["ukazovateľ"] }}</td>
+      <td class="num">{{ "%.4f"|format(r["firma"]) }}</td>
+      <td class="num">{{ "%.4f"|format(r["medián odvetvia"]) }}</td>
+      <td class="num">{{ "%.4f"|format(r["Q25"]) }}</td>
+      <td class="num">{{ "%.4f"|format(r["Q75"]) }}</td>
+      <td class="pos-{{ 'pod' if 'pod' in r['pozícia'] else 'nad' if 'nad' in r['pozícia'] else 'stred' }}">{{ r["pozícia"] }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+<p class="meta">Počet porovnávaných firiem v odvetví: {{ n_peers_total }}</p>
+
+<div class="footer">
+  Automaticky vygenerované — bakalárska práca, praktická časť.
+  Zdroj: FinStat / účtovné závierky 2008.
+</div>
+</body>
+</html>
