@@ -1,4 +1,4 @@
-"""
+﻿"""
 Modul na nacitanie a cistenie uctovnych zavierok z CSV suborov (finstat.sk).
 """
 
@@ -18,11 +18,11 @@ BRUTTO_CSV = RAW / "dataset_uctovnych_vykazov_aktiva_brutto_2008.csv"
 DATE_COLS = (
     "Obdobie od",
     "Obdobie do",
-    "Predchádzajúce obdobie od",
-    "Predchádzajúce obdobie do",
-    "Dátum vzniku",
-    "Dátum zániku",
-    "Dátum zverejnenia účtovnej závierky",
+    "PredchГЎdzajГєce obdobie od",
+    "PredchГЎdzajГєce obdobie do",
+    "DГЎtum vzniku",
+    "DГЎtum zГЎniku",
+    "DГЎtum zverejnenia ГєДЌtovnej zГЎvierky",
 )
 
 # excel niekedy exportuje DIC ako ="12345" - treba odstranit
@@ -46,7 +46,7 @@ def _clean_metadata(df):
         if col in df.columns:
             df[col] = df[col].map(_strip_excel_prefix)
 
-    # parsovanie datumov, 0001-01-01 su placeholder hodnoty
+    # 0001-01-01 su placeholder hodnoty z finstatu, nahradzujeme NaT
     for col in DATE_COLS:
         if col in df.columns:
             parsed = pd.to_datetime(df[col], errors="coerce")
@@ -119,3 +119,4 @@ if __name__ == "__main__":
         f"odvetvi={df['Odvetvie'].nunique()}  "
         f"-> {out}"
     )
+
