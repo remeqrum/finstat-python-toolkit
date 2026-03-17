@@ -1,4 +1,4 @@
-﻿"""
+"""
 Vypocet financnych ukazovatelov z uctovnych zavierok.
 
 Likvidita, zadlzenost, rentabilita, aktivita + Altman Z-skore.
@@ -10,24 +10,24 @@ import pandas as pd
 # mapovanie skratenych nazvov na stlpce v datasete
 COL = {
     "total_assets":      "Spolu majetok [002+030+061]",
-    "current_assets":    "ObeЕѕnГЅ majetok [031+038+046+055]",
-    "inventory":         "ZГЎsoby sГєДЌet [032 aЕѕ 037]",
-    "short_receivables": "KrГЎtkodobГ© pohДѕadГЎvky sГєДЌet [047 aЕѕ 054]",
-    "cash":              "FinanДЌnГ© ГєДЌty sГєДЌet [056 aЕѕ 060]",
-    "equity":            "VlastnГ© imanie [068+073+080+084+087]",
-    "liabilities":       "ZГЎvГ¤zky [089+094+106+117+118]",
-    "short_liabilities": "KrГЎtkodobГ© zГЎvГ¤zky sГєДЌet [107 aЕѕ 116]",
-    "bank_loans":        "BankovГ© Гєvery [119+120]",
-    "retained":          "VГЅsledok hospodГЎrenia minulГЅch rokov [085+086]",
-    "ebit":              "VГЅsledok hospodГЎrenia z hospodГЎrskej ДЌinnosti [11-12-17-18+19-20 -21+22-23+(-24)-(-25)]",
+    "current_assets":    "Obežný majetok [031+038+046+055]",
+    "inventory":         "Zásoby súčet [032 až 037]",
+    "short_receivables": "Krátkodobé pohľadávky súčet [047 až 054]",
+    "cash":              "Finančné účty súčet [056 až 060]",
+    "equity":            "Vlastné imanie [068+073+080+084+087]",
+    "liabilities":       "Záväzky [089+094+106+117+118]",
+    "short_liabilities": "Krátkodobé záväzky súčet [107 až 116]",
+    "bank_loans":        "Bankové úvery [119+120]",
+    "retained":          "Výsledok hospodárenia minulých rokov [085+086]",
+    "ebit":              "Výsledok hospodárenia z hospodárskej činnosti [11-12-17-18+19-20 -21+22-23+(-24)-(-25)]",
     "ebitda":            "EBITDA",
-    "net_income":        "VГЅsledok hospodГЎrenia za ГєДЌtovnГ© obdobie po zdanenГ­ [001-(068+073+080 +084+088+121)]",
-    "value_added":       "PridanГЎ hodnota [03+04-08]",
-    "revenue_total":     "TrЕѕby (spolu)",
+    "net_income":        "Výsledok hospodárenia za účtovné obdobie po zdanení [001-(068+073+080 +084+088+121)]",
+    "value_added":       "Pridaná hodnota [03+04-08]",
+    "revenue_total":     "Tržby (spolu)",
 }
 
-ALTMAN_FINSTAT = "KreditnГЅ model: Altmanovo Z-skГіre"
-ALTMAN_FINSTAT_LABEL = "KreditnГЅ model: Altmanovo Z-skГіre - indikГЎcia"
+ALTMAN_FINSTAT = "Kreditný model: Altmanovo Z-skóre"
+ALTMAN_FINSTAT_LABEL = "Kreditný model: Altmanovo Z-skóre - indikácia"
 
 
 def _safe_div(num, den):
@@ -83,6 +83,7 @@ def compute_ratios(df):
     out["act_asset_turnover"] = _safe_div(revenue, total_assets)
 
     # Altman Z-skore (povodna formula 1968)
+    # TODO: mozno pridat aj Tafflerov model ako doplnok
     x1 = _safe_div(current_assets - short_liab, total_assets)
     x2 = _safe_div(retained, total_assets)
     x3 = _safe_div(ebit, total_assets)
@@ -113,4 +114,3 @@ if __name__ == "__main__":
     print(f"Companies in distress zone (Altman Z < 1.81): "
           f"{r['risk_altman'].sum()} / {r['altman_z_own'].notna().sum()} "
           f"({r['risk_altman'].mean():.1%})")
-
