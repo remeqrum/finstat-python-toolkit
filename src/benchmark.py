@@ -1,4 +1,4 @@
-﻿"""
+"""
 Odvetvove a regionalne agregaty pre benchmark analyzu.
 """
 
@@ -75,13 +75,13 @@ def compare_to_industry(ratios, ico):
         else:
             position = "v medzikvartilovom rozsahu"
         rows.append({
-            "ukazovateДѕ":     col,
+            "ukazovateľ":     col,
             "firma":          round(float(company_val), 4),
-            "mediГЎn odvetvia": round(float(median), 4),
+            "medián odvetvia": round(float(median), 4),
             "Q25":            round(float(q25), 4),
             "Q75":            round(float(q75), 4),
             "n_peers":        len(peer_vals),
-            "pozГ­cia":        position,
+            "pozícia":        position,
         })
 
     out = pd.DataFrame(rows)
@@ -99,7 +99,7 @@ if __name__ == "__main__":
     ratios = compute_ratios(df)
 
     ind = industry_aggregates(ratios)
-    print("=== Top 5 odvetvi ===")
+    print("=== Top 5 odvetvi podla poctu firiem ===")
     show = ["company_count", "liq_current_median", "dbt_total_median",
             "prof_roa_median", "altman_z_own_median"]
     print(ind[show].head(5).round(3).to_string())
@@ -110,4 +110,3 @@ if __name__ == "__main__":
     print(f"=== Benchmark: {cmp.attrs['nazov']} (Ico {cmp.attrs['ico']}, "
           f"odvetvie: {cmp.attrs['odvetvie']}) ===")
     print(cmp.to_string(index=False))
-
