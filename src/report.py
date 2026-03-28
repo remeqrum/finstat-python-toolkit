@@ -168,7 +168,7 @@ def write_excel(meta, comparison, out_path):
     for col_idx, col_letter in enumerate("ABCDEFG", start=1):
         ws2.column_dimensions[col_letter].width = [26, 12, 16, 12, 12, 10, 26][col_idx - 1]
 
-    # grafy - jeden per kategoria ukazovatelov
+    # pridane grafy - jeden stlpcovy graf per kategoria ukazovatelov
     tick_font = _font_props(1000)
     label_font = _font_props(1000)
 
@@ -253,4 +253,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
