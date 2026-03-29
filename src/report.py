@@ -1,4 +1,4 @@
-﻿"""
+"""
 Generator benchmark reportov pre konkretnu firmu.
 
 Vytvara Excel (.xlsx) a HTML (.html) report.
@@ -44,25 +44,25 @@ TITLE_FONT = Font(bold=True, size=14)
 
 # nazvy ukazovatelov po slovensky
 RATIO_LABELS = {
-    "liq_cash":           "Likvidita 1. stupЕ€a",
-    "liq_quick":          "Likvidita 2. stupЕ€a",
-    "liq_current":        "Likvidita 3. stupЕ€a",
-    "dbt_total":          "CelkovГЎ zadlЕѕenosЕҐ",
+    "liq_cash":           "Likvidita 1. stupňa",
+    "liq_quick":          "Likvidita 2. stupňa",
+    "liq_current":        "Likvidita 3. stupňa",
+    "dbt_total":          "Celková zadlženosť",
     "dbt_equity_ratio":   "Koef. samofinancovania",
     "dbt_debt_equity":    "Cudzie zdroje / vl. imanie",
     "prof_roa":           "ROA",
     "prof_roe":           "ROE",
     "prof_ros":           "ROS",
-    "prof_ebitda_margin": "EBITDA marЕѕa",
-    "act_asset_turnover": "ObrГЎtka aktГ­v",
-    "altman_z_own":       "Altman Z (vlastnГЅ)",
+    "prof_ebitda_margin": "EBITDA marža",
+    "act_asset_turnover": "Obrátka aktív",
+    "altman_z_own":       "Altman Z (vlastný)",
     "altman_z_finstat":   "Altman Z (FinStat)",
 }
 
 # kategorie pre grafy v exceli
 RATIO_CATEGORIES = [
     ("Likvidita",            ("liq_cash", "liq_quick", "liq_current")),
-    ("KapitГЎlovГЎ ЕЎtruktГєra", ("dbt_total", "dbt_equity_ratio", "dbt_debt_equity")),
+    ("Kapitálová štruktúra", ("dbt_total", "dbt_equity_ratio", "dbt_debt_equity")),
     ("Rentabilita",          ("prof_roa", "prof_roe", "prof_ros", "prof_ebitda_margin")),
     ("Aktivita a Altman Z",  ("act_asset_turnover", "altman_z_own", "altman_z_finstat")),
 ]
@@ -100,13 +100,13 @@ def _meta_for(df, ico):
         "kraj":          r["Kraj"],
         "okres":         r.get("Okres"),
         "mesto":         r.get("Mesto"),
-        "pravna_forma":  r.get("PrГЎvna forma"),
-        "kar_status":    r.get("KaR, LikvidГЎcie"),
-        "altman_finstat": r.get("KreditnГЅ model: Altmanovo Z-skГіre"),
-        "altman_label":  r.get("KreditnГЅ model: Altmanovo Z-skГіre - indikГЎcia"),
-        "trЕѕby":         r.get("TrЕѕby (spolu)"),
+        "pravna_forma":  r.get("Právna forma"),
+        "kar_status":    r.get("KaR, Likvidácie"),
+        "altman_finstat": r.get("Kreditný model: Altmanovo Z-skóre"),
+        "altman_label":  r.get("Kreditný model: Altmanovo Z-skóre - indikácia"),
+        "tržby":         r.get("Tržby (spolu)"),
         "ebitda":        r.get("EBITDA"),
-        "zamestnanci":   r.get("KategГіria zamestnancov(zo Е tatistickГ©ho Гєradu)"),
+        "zamestnanci":   r.get("Kategória zamestnancov(zo Štatistického úradu)"),
     }
 
 
@@ -117,25 +117,25 @@ def write_excel(meta, comparison, out_path):
 
     # --- List 1: Suhrn ---
     ws = wb.active
-    ws.title = "SГєhrn"
-    ws["A1"] = f"Benchmark report вЂ” {meta['nazov']}"
+    ws.title = "Súhrn"
+    ws["A1"] = f"Benchmark report — {meta['nazov']}"
     ws["A1"].font = TITLE_FONT
     ws.merge_cells("A1:D1")
 
     info_rows = [
-        ("IДЊO",             meta["ico"]),
-        ("DIДЊ",             meta["dic"]),
+        ("IČO",             meta["ico"]),
+        ("DIČ",             meta["dic"]),
         ("Odvetvie",        meta["odvetvie"]),
         ("Kraj",            meta["kraj"]),
         ("Okres",           meta["okres"]),
         ("Mesto",           meta["mesto"]),
-        ("PrГЎvna forma",    meta["pravna_forma"]),
-        ("VeДѕkosЕҐ (zamestnanci)", meta["zamestnanci"]),
-        ("TrЕѕby (spolu)",   meta["trЕѕby"]),
+        ("Právna forma",    meta["pravna_forma"]),
+        ("Veľkosť (zamestnanci)", meta["zamestnanci"]),
+        ("Tržby (spolu)",   meta["tržby"]),
         ("EBITDA",          meta["ebitda"]),
         ("Altman Z (FinStat)", meta["altman_finstat"]),
-        ("IndikГЎcia FinStat", meta["altman_label"]),
-        ("Stav (KaR / likvidГЎcie)", meta["kar_status"]),
+        ("Indikácia FinStat", meta["altman_label"]),
+        ("Stav (KaR / likvidácie)", meta["kar_status"]),
     ]
     for i, (label, value) in enumerate(info_rows, start=3):
         ws.cell(row=i, column=1, value=label).font = Font(bold=True)
@@ -145,8 +145,8 @@ def write_excel(meta, comparison, out_path):
     ws.column_dimensions["B"].width = 50
 
     # --- List 2: Porovnanie s odvetvim ---
-    ws2 = wb.create_sheet("Porovnanie s odvetvГ­m")
-    headers = ["UkazovateДѕ", "Firma", "MediГЎn odvetvia", "Q25", "Q75", "n_peers", "PozГ­cia"]
+    ws2 = wb.create_sheet("Porovnanie s odvetvím")
+    headers = ["Ukazovateľ", "Firma", "Medián odvetvia", "Q25", "Q75", "n_peers", "Pozícia"]
     for col, h in enumerate(headers, start=1):
         cell = ws2.cell(row=1, column=col, value=h)
         cell.font = HEADER_FONT
@@ -168,7 +168,7 @@ def write_excel(meta, comparison, out_path):
     for col_idx, col_letter in enumerate("ABCDEFG", start=1):
         ws2.column_dimensions[col_letter].width = [26, 12, 16, 12, 12, 10, 26][col_idx - 1]
 
-    # pridane grafy - jeden stlpcovy graf per kategoria ukazovatelov
+    # grafy - jeden per kategoria ukazovatelov
     tick_font = _font_props(1000)
     label_font = _font_props(1000)
 
@@ -202,7 +202,7 @@ def write_excel(meta, comparison, out_path):
         chart.add_data(median_ref, titles_from_data=False)
         chart.set_categories(cats_ref)
         chart.series[0].tx = SeriesLabel(v="Firma")
-        chart.series[1].tx = SeriesLabel(v="MediГЎn odvetvia")
+        chart.series[1].tx = SeriesLabel(v="Medián odvetvia")
 
         chart.height = 11
         chart.width = 22
@@ -211,6 +211,25 @@ def write_excel(meta, comparison, out_path):
     wb.save(out_path)
     return out_path
 
+
+def write_html(meta, comparison, out_path):
+    """Vygeneruje HTML report z jinja2 sablony."""
+    out_path.parent.mkdir(parents=True, exist_ok=True)
+    env = Environment(
+        loader=FileSystemLoader(TEMPLATE_DIR),
+        autoescape=select_autoescape(["html"]),
+    )
+    template = env.get_template("company_report.html.j2")
+
+    rows = comparison.to_dict(orient="records")
+    n_peers_total = int(comparison["n_peers"].max()) if "n_peers" in comparison.columns else 0
+    rendered = template.render(
+        rows=rows,
+        n_peers_total=n_peers_total,
+        **meta,
+    )
+    out_path.write_text(rendered, encoding="utf-8")
+    return out_path
 
 
 def generate_report(ico, formats=("xlsx", "html"), output_dir=OUTPUT_DIR):
@@ -227,7 +246,7 @@ def generate_report(ico, formats=("xlsx", "html"), output_dir=OUTPUT_DIR):
 
     if "xlsx" in formats:
         paths.append(write_excel(meta, comparison, base.with_suffix(".xlsx")))
-    if "_skip_" in formats:
+    if "html" in formats:
         paths.append(write_html(meta, comparison, base.with_suffix(".html")))
     return paths
 
@@ -253,5 +272,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-
