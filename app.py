@@ -1,4 +1,4 @@
-﻿"""
+"""
 Streamlit dashboard - interaktivny prehlad datasetu.
 
 Spustenie: streamlit run app.py
@@ -26,9 +26,9 @@ def _data():
 
 df, ratios = _data()
 
-st.title("Benchmark slovenskГЅch firiem вЂ” automatizovanГЅ dashboard")
+st.title("Benchmark slovenských firiem — automatizovaný dashboard")
 st.caption(
-    "BakalГЎrska prГЎca, praktickГЎ ДЌasЕҐ В· zdroj: ГєДЌtovnГ© zГЎvierky 2008 (FinStat) В· "
+    "Bakalárska práca, praktická časť · zdroj: účtovné závierky 2008 (FinStat) · "
     f"{len(df)} firiem v {df['Odvetvie'].nunique()} odvetviach"
 )
 
@@ -36,62 +36,62 @@ st.caption(
 with st.sidebar:
     st.header("Filtre")
     industries = sorted(df["Odvetvie"].dropna().unique())
-    industry = st.selectbox("Odvetvie", ["(vЕЎetky)"] + industries)
+    industry = st.selectbox("Odvetvie", ["(všetky)"] + industries)
     regions = sorted(df["Kraj"].dropna().unique())
-    region = st.selectbox("Kraj", ["(vЕЎetky)"] + regions)
+    region = st.selectbox("Kraj", ["(všetky)"] + regions)
 
     sub_df = df.copy()
     sub_ratios = ratios.copy()
-    if industry != "(vЕЎetky)":
+    if industry != "(všetky)":
         sub_df = sub_df[sub_df["Odvetvie"] == industry]
         sub_ratios = sub_ratios[sub_ratios["Odvetvie"] == industry]
-    if region != "(vЕЎetky)":
+    if region != "(všetky)":
         sub_df = sub_df[sub_df["Kraj"] == region]
         sub_ratios = sub_ratios[sub_ratios["Kraj"] == region]
 
-    st.metric("VybranГЅch firiem", len(sub_df))
+    st.metric("Vybraných firiem", len(sub_df))
 
 # --- Taby ---
 tab_overview, tab_industry, tab_company = st.tabs(
-    ["PrehДѕad", "OdvetvovГ© mediГЎny", "Firma vs odvetvie"]
+    ["Prehľad", "Odvetvové mediány", "Firma vs odvetvie"]
 )
 
 # === Tab 1: Prehlad ===
 with tab_overview:
     c1, c2, c3, c4 = st.columns(4)
     c1.metric("Firmy", len(sub_df))
-    c2.metric("MediГЎn ROA", f"{sub_ratios['prof_roa'].median():.2%}"
-              if sub_ratios["prof_roa"].notna().any() else "вЂ”")
-    c3.metric("MediГЎn Altman Z", f"{sub_ratios['altman_z_own'].median():.2f}"
-              if sub_ratios["altman_z_own"].notna().any() else "вЂ”")
+    c2.metric("Medián ROA", f"{sub_ratios['prof_roa'].median():.2%}"
+              if sub_ratios["prof_roa"].notna().any() else "—")
+    c3.metric("Medián Altman Z", f"{sub_ratios['altman_z_own'].median():.2f}"
+              if sub_ratios["altman_z_own"].notna().any() else "—")
     distress_count = int(sub_ratios["risk_altman"].sum())
-    c4.metric("V zГіne distresu", distress_count)
+    c4.metric("V zóne distresu", distress_count)
 
-    st.subheader("Top firmy podДѕa trЕѕieb")
-    revenue_col = "TrЕѕby (spolu)"
+    st.subheader("Top firmy podľa tržieb")
+    revenue_col = "Tržby (spolu)"
     top = (sub_df[["Nazov", "Odvetvie", "Kraj", revenue_col]]
            .dropna(subset=[revenue_col])
            .nlargest(15, revenue_col)
            .reset_index(drop=True))
     top[revenue_col] = (top[revenue_col] / 1_000_000).round(1)
-    top = top.rename(columns={revenue_col: "TrЕѕby (mil. SKK)"})
+    top = top.rename(columns={revenue_col: "Tržby (mil. SKK)"})
     st.dataframe(top, use_container_width=True)
 
-    st.subheader("DistribГєcia ROA")
+    st.subheader("Distribúcia ROA")
     roa = sub_ratios["prof_roa"].dropna()
     roa = roa[roa.between(-1, 1)]
     if not roa.empty:
         fig, ax = plt.subplots(figsize=(9, 3.5))
         sns.histplot(roa, bins=30, kde=True, color="#4C72B0", ax=ax)
         ax.axvline(0, color="black", lw=0.7)
-        ax.set_xlabel("ROA"); ax.set_ylabel("PoДЌet firiem")
+        ax.set_xlabel("ROA"); ax.set_ylabel("Počet firiem")
         st.pyplot(fig, clear_figure=True)
     else:
-        st.info("Pre vybranГЅ filter nie sГє dostupnГ© Гєdaje o ROA.")
+        st.info("Pre vybraný filter nie sú dostupné údaje o ROA.")
 
 # === Tab 2: Odvetvove mediany ===
 with tab_industry:
-    st.subheader("MediГЎn ukazovateДѕov podДѕa odvetvia")
+    st.subheader("Medián ukazovateľov podľa odvetvia")
     ind = industry_aggregates(ratios)
     show_cols = [
         "company_count",
@@ -99,13 +99,46 @@ with tab_industry:
         "prof_ebitda_margin_median", "altman_z_own_median",
     ]
     pretty = ind[show_cols].rename(columns={
-        "company_count":             "PoДЌet firiem",
+        "company_count":             "Počet firiem",
         "liq_current_median":        "Likvidita 3. st.",
-        "dbt_total_median":          "Celk. zadlЕѕenosЕҐ",
+        "dbt_total_median":          "Celk. zadlženosť",
         "prof_roa_median":           "ROA",
-        "prof_ebitda_margin_median": "EBITDA marЕѕa",
+        "prof_ebitda_margin_median": "EBITDA marža",
         "altman_z_own_median":       "Altman Z",
     }).round(3)
     st.dataframe(pretty, use_container_width=True)
 
+# === Tab 3: Porovnanie firmy ===
+with tab_company:
+    st.subheader("Porovnanie konkrétnej firmy s odvetvím")
 
+    eligible = sub_df[["Ico", "Nazov", "Odvetvie"]].dropna().sort_values("Nazov")
+    if eligible.empty:
+        st.info("Vo vybranom filtri nie sú firmy.")
+    else:
+        labels = eligible["Nazov"] + " (IČO " + eligible["Ico"] + ")"
+        choice = st.selectbox("Firma", labels.tolist())
+        ico = choice.split("IČO ")[-1].rstrip(")")
+
+        try:
+            cmp = compare_to_industry(ratios, ico)
+        except KeyError as e:
+            st.error(str(e))
+        else:
+            st.markdown(
+                f"**{cmp.attrs['nazov']}** &nbsp;·&nbsp; "
+                f"odvetvie: {cmp.attrs['odvetvie']} &nbsp;·&nbsp; IČO {ico}"
+            )
+            st.dataframe(cmp, use_container_width=True, hide_index=True)
+
+            if not cmp.empty:
+                fig, ax = plt.subplots(figsize=(9, 4))
+                x = range(len(cmp))
+                ax.barh([i - 0.2 for i in x], cmp["firma"], height=0.4, label="firma", color="#4C72B0")
+                ax.barh([i + 0.2 for i in x], cmp["medián odvetvia"], height=0.4,
+                        label="medián odvetvia", color="#DD8452")
+                ax.set_yticks(list(x))
+                ax.set_yticklabels(cmp["ukazovateľ"])
+                ax.invert_yaxis()
+                ax.legend()
+                st.pyplot(fig, clear_figure=True)
