@@ -8,8 +8,9 @@ build/
 venv/
 .venv/
 
-# Spracovane data (generovane, netreba verzovat)
+# Generovane subory (netreba verzovat)
 data/processed/
+reports/output/
 
 # IDE
 .vscode/
