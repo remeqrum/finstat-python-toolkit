@@ -83,7 +83,6 @@ def compute_ratios(df):
     out["act_asset_turnover"] = _safe_div(revenue, total_assets)
 
     # Altman Z-skore (povodna formula 1968)
-    # TODO: mozno pridat aj Tafflerov model ako doplnok
     x1 = _safe_div(current_assets - short_liab, total_assets)
     x2 = _safe_div(retained, total_assets)
     x3 = _safe_div(ebit, total_assets)
@@ -97,6 +96,16 @@ def compute_ratios(df):
 
     # firma je v zone distresu ak Z < 1.81
     out["risk_altman"] = out["altman_z_own"] < 1.81
+
+    # Tafflerov T-skore (1983) - alternativny kreditny model
+    t1 = _safe_div(ebit, short_liab)
+    t2 = _safe_div(current_assets, liabilities)
+    t3 = _safe_div(short_liab, total_assets)
+    t4 = _safe_div(revenue, total_assets)
+    out["taffler_t"] = 0.53 * t1 + 0.13 * t2 + 0.18 * t3 + 0.16 * t4
+
+    # firma je v zone distresu ak T < 0.2
+    out["risk_taffler"] = out["taffler_t"] < 0.2
 
     return out
 
@@ -114,3 +123,6 @@ if __name__ == "__main__":
     print(f"Companies in distress zone (Altman Z < 1.81): "
           f"{r['risk_altman'].sum()} / {r['altman_z_own'].notna().sum()} "
           f"({r['risk_altman'].mean():.1%})")
+    print(f"Companies in distress zone (Taffler T < 0.2): "
+          f"{r['risk_taffler'].sum()} / {r['taffler_t'].notna().sum()} "
+          f"({r['risk_taffler'].mean():.1%})")

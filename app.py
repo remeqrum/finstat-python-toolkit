@@ -58,14 +58,16 @@ tab_overview, tab_industry, tab_company = st.tabs(
 
 # === Tab 1: Prehlad ===
 with tab_overview:
-    c1, c2, c3, c4 = st.columns(4)
+    c1, c2, c3, c4, c5 = st.columns(5)
     c1.metric("Firmy", len(sub_df))
     c2.metric("Medián ROA", f"{sub_ratios['prof_roa'].median():.2%}"
               if sub_ratios["prof_roa"].notna().any() else "—")
     c3.metric("Medián Altman Z", f"{sub_ratios['altman_z_own'].median():.2f}"
               if sub_ratios["altman_z_own"].notna().any() else "—")
     distress_count = int(sub_ratios["risk_altman"].sum())
-    c4.metric("V zóne distresu", distress_count)
+    c4.metric("Altman distres", distress_count)
+    taffler_count = int(sub_ratios["risk_taffler"].sum())
+    c5.metric("Taffler distres", taffler_count)
 
     st.subheader("Top firmy podľa tržieb")
     revenue_col = "Tržby (spolu)"
