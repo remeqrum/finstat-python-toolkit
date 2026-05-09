@@ -1,4 +1,4 @@
-﻿"""
+"""
 Modul na nacitanie a cistenie uctovnych zavierok z CSV suborov (finstat.sk).
 """
 
@@ -99,7 +99,23 @@ def load_clean_dataset():
     """Nacita, ocisti a spoji oba datasety. Hlavna funkcia modulu."""
     full = load_full_form()
     brutto = load_brutto_form()
-    return merge_datasets(full, brutto)
+    df = merge_datasets(full, brutto)
+    
+    # Zakladna validacia dat:
+    # Pre vypocet vsetkych financnych ukazovatelov potrebujeme mat Aktiva spolu > 0.
+    # Zaporne alebo nulove aktiva su uctovny nezmysel pre nase ucely.
+    povodny_pocet = len(df)
+    
+    col_assets = "Spolu majetok [002+030+061]"
+    if col_assets in df.columns:
+        valid_assets = pd.to_numeric(df[col_assets], errors="coerce") > 0
+        df = df[valid_assets].copy()
+        
+    odstranene = povodny_pocet - len(df)
+    if odstranene > 0:
+        print(f"[Validacia] Odstranenych {odstranene} firiem kvoli neplatnym (<=0) aktivam.")
+        
+    return df
 
 
 def save_processed(df, name="dataset_clean"):
