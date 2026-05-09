@@ -45,7 +45,7 @@ def compare_to_industry(ratios, ico):
     ico = str(ico).strip()
     company_row = ratios.loc[ratios["Ico"] == ico]
     if company_row.empty:
-        raise KeyError(f"Ico {ico!r} not found in ratios DataFrame.")
+        raise KeyError(f"IČO {ico!r} sa nenašlo v datasete.")
 
     company = company_row.iloc[0]
     industry = company["Odvetvie"]

@@ -178,4 +178,4 @@ if __name__ == "__main__":
     ratios = compute_ratios(df)
     paths = generate_all(df, ratios)
     for p in paths:
-        print(f"saved: {p}")
+        print(f"Uložené: {p}")

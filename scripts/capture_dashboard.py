@@ -24,13 +24,13 @@ def main():
 
         # screenshot prehladu
         page.screenshot(path=str(OUT / "streamlit_01_overview.png"), full_page=True)
-        print(f"saved: {OUT / 'streamlit_01_overview.png'}")
+        print(f"Uložené: {OUT / 'streamlit_01_overview.png'}")
 
         # tab odvetvove mediany
         page.get_by_role("tab", name="Odvetvové mediány").click()
         page.wait_for_timeout(2000)
         page.screenshot(path=str(OUT / "streamlit_02_industry_medians.png"), full_page=True)
-        print(f"saved: {OUT / 'streamlit_02_industry_medians.png'}")
+        print(f"Uložené: {OUT / 'streamlit_02_industry_medians.png'}")
 
         # tab porovnanie firmy - vyberieme TESCO
         page.get_by_role("tab", name="Firma vs odvetvie").click()
@@ -43,7 +43,7 @@ def main():
         page.keyboard.press("Enter")
         page.wait_for_timeout(3000)
         page.screenshot(path=str(OUT / "streamlit_03_company_benchmark.png"), full_page=True)
-        print(f"saved: {OUT / 'streamlit_03_company_benchmark.png'}")
+        print(f"Uložené: {OUT / 'streamlit_03_company_benchmark.png'}")
 
         browser.close()
 

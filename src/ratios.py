@@ -120,9 +120,9 @@ if __name__ == "__main__":
     summary = numeric.describe().T[["count", "mean", "50%", "min", "max"]].round(3)
     print(summary.to_string())
     print()
-    print(f"Companies in distress zone (Altman Z < 1.81): "
+    print(f"Firmy v zóne distresu (Altman Z < 1.81): "
           f"{r['risk_altman'].sum()} / {r['altman_z_own'].notna().sum()} "
           f"({r['risk_altman'].mean():.1%})")
-    print(f"Companies in distress zone (Taffler T < 0.2): "
+    print(f"Firmy v zóne distresu (Taffler T < 0.2): "
           f"{r['risk_taffler'].sum()} / {r['taffler_t'].notna().sum()} "
           f"({r['risk_taffler'].mean():.1%})")

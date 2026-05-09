@@ -91,7 +91,7 @@ def _meta_for(df, ico):
     """Ziska metadaje o firme podla ICO."""
     row = df.loc[df["Ico"] == ico]
     if row.empty:
-        raise KeyError(f"Ico {ico!r} not found in dataset.")
+        raise KeyError(f"IČO {ico!r} sa nenašlo v datasete.")
     r = row.iloc[0]
     return {
         "ico":           ico,
@@ -268,7 +268,7 @@ def main():
 
     paths = generate_report(args.ico, tuple(fmts), args.output)
     for p in paths:
-        print(f"saved: {p}")
+        print(f"Uložené: {p}")
 
 
 if __name__ == "__main__":
