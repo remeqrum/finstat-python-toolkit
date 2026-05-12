@@ -20,6 +20,7 @@ Alebo dvojklik na `install.bat`.
 ```
 python -m src.load
 python -m src.ratios
+python -m src.benchmark
 python -m src.visualize
 ```
 
