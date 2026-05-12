@@ -82,7 +82,7 @@ def compute_ratios(df):
     # aktivita
     out["act_asset_turnover"] = _safe_div(revenue, total_assets)
 
-    # Altman Z-skore (povodna formula 1968)
+    # Altman 1968 - povodna pat-faktorova formula, vyber zdovodneny v §4.3.2 prace
     x1 = _safe_div(current_assets - short_liab, total_assets)
     x2 = _safe_div(retained, total_assets)
     x3 = _safe_div(ebit, total_assets)
