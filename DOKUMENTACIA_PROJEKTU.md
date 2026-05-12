@@ -6,7 +6,7 @@ Praktická časť bakalárskej práce - automatizácia spracovania účtovných 
 
 Pipeline na spracovanie CSV suborov z finstat.sk:
 1. Nacita a ocisti data (src/load.py)
-2. Vypocita 13 financnych ukazovatelov (src/ratios.py)
+2. Vypocita 12 financnych ukazovatelov (src/ratios.py)
 3. Porovna firmy s odvetvovym medianom (src/benchmark.py)
 4. Vygeneruje grafy (src/visualize.py)
 5. Vytvori Excel a HTML reporty (src/report.py)
