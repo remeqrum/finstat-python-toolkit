@@ -116,9 +116,13 @@ with tab_company:
     if eligible.empty:
         st.info("Vo vybranom filtri nie sú firmy.")
     else:
-        labels = eligible["Nazov"] + " (IČO " + eligible["Ico"] + ")"
-        choice = st.selectbox("Firma", labels.tolist())
-        ico = choice.split("IČO ")[-1].rstrip(")")
+        # mapovanie labelu na ICO - vyhneme sa parsovaniu retazca po vybere
+        label_to_ico = dict(zip(
+            eligible["Nazov"] + " (IČO " + eligible["Ico"] + ")",
+            eligible["Ico"],
+        ))
+        choice = st.selectbox("Firma", list(label_to_ico))
+        ico = label_to_ico[choice]
 
         try:
             cmp = compare_to_industry(ratios, ico)
