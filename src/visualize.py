@@ -29,6 +29,7 @@ def altman_by_industry(ratios, top_n=10):
     counts = ratios["Odvetvie"].value_counts()
     top = counts.head(top_n).index
     data = ratios[ratios["Odvetvie"].isin(top)].dropna(subset=["altman_z_own"])
+    # orezavame extremne outliery - Altman moze byt v stovkach pri firmach s takmer nulovymi pasivami
     data = data[data["altman_z_own"].between(-10, 20)]
 
     order = data.groupby("Odvetvie")["altman_z_own"].median().sort_values().index
@@ -114,6 +115,7 @@ def roa_histogram(ratios):
     """Histogram ROA napriec vsetkymi firmami."""
     _ensure_dir()
     data = ratios["prof_roa"].dropna()
+    # ROA mimo +/-100% je obvykle artefakt pri firmach s velmi malymi aktivami
     data = data[data.between(-1, 1)]
 
     fig, ax = plt.subplots(figsize=(9, 5))

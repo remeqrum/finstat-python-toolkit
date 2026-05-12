@@ -82,6 +82,7 @@ def load_brutto_form(path=BRUTTO_CSV):
 
 def merge_datasets(full, brutto):
     """Spoji oba datasety podla ICO."""
+    # brutto dataset moze mat duplicity pre to iste ICO - ponechavame prvy zaznam
     brutto_unique = brutto.drop_duplicates(subset="Ico", keep="first")
     keep_cols = [
         c for c in brutto_unique.columns
