@@ -18,11 +18,11 @@ BRUTTO_CSV = RAW / "dataset_uctovnych_vykazov_aktiva_brutto_2008.csv"
 DATE_COLS = (
     "Obdobie od",
     "Obdobie do",
-    "PredchГЎdzajГєce obdobie od",
-    "PredchГЎdzajГєce obdobie do",
-    "DГЎtum vzniku",
-    "DГЎtum zГЎniku",
-    "DГЎtum zverejnenia ГєДЌtovnej zГЎvierky",
+    "Predchádzajúce obdobie od",
+    "Predchádzajúce obdobie do",
+    "Dátum vzniku",
+    "Dátum zániku",
+    "Dátum zverejnenia účtovnej závierky",
 )
 
 # excel niekedy exportuje DIC ako ="12345" - treba odstranit
