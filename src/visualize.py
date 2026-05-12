@@ -49,32 +49,6 @@ def altman_by_industry(ratios, top_n=10):
     return out
 
 
-def taffler_by_industry(ratios, top_n=10):
-    """Boxplot Tafflerovho T-skóre podľa odvetvia."""
-    _ensure_dir()
-    counts = ratios["Odvetvie"].value_counts()
-    top = counts.head(top_n).index
-    data = ratios[ratios["Odvetvie"].isin(top)].dropna(subset=["taffler_t"])
-    data = data[data["taffler_t"].between(-2, 5)]
-
-    order = data.groupby("Odvetvie")["taffler_t"].median().sort_values().index
-
-    fig, ax = plt.subplots(figsize=(11, 6))
-    sns.boxplot(data=data, y="Odvetvie", x="taffler_t", order=order, ax=ax,
-                color="#55A868", fliersize=3)
-    ax.axvline(0.2, color="red", linestyle="--", linewidth=1, label="zóna distresu (T<0.2)")
-    ax.axvline(0.3, color="green", linestyle="--", linewidth=1, label="bezpečná zóna (T>0.3)")
-    ax.set_xlabel("Tafflerovo T-skóre")
-    ax.set_ylabel("Odvetvie")
-    ax.set_title(f"Distribúcia Tafflerovho T-skóre podľa odvetvia (top {top_n} odvetví)")
-    ax.legend(loc="lower right")
-    fig.tight_layout()
-    out = FIG_DIR / "01b_taffler_by_industry.png"
-    fig.savefig(out, dpi=140)
-    plt.close(fig)
-    return out
-
-
 def industry_region_heatmap(df, top_n_industries=10):
     """Heatmapa poctu firiem podla odvetvia a kraja."""
     _ensure_dir()
@@ -162,7 +136,6 @@ def generate_all(df, ratios):
     """Vygeneruje vsetky grafy naraz."""
     return [
         altman_by_industry(ratios),
-        taffler_by_industry(ratios),
         industry_region_heatmap(df),
         top_n_by_revenue(df),
         kar_status_distribution(df),

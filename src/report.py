@@ -57,7 +57,6 @@ RATIO_LABELS = {
     "act_asset_turnover": "Obrátka aktív",
     "altman_z_own":       "Altman Z (vlastný)",
     "altman_z_finstat":   "Altman Z (FinStat)",
-    "taffler_t":          "Taffler T (vlastný)",
 }
 
 # kategorie pre grafy v exceli
@@ -65,7 +64,7 @@ RATIO_CATEGORIES = [
     ("Likvidita",            ("liq_cash", "liq_quick", "liq_current")),
     ("Kapitálová štruktúra", ("dbt_total", "dbt_equity_ratio", "dbt_debt_equity")),
     ("Rentabilita",          ("prof_roa", "prof_roe", "prof_ros", "prof_ebitda_margin")),
-    ("Aktivita a kreditné modely",  ("act_asset_turnover", "altman_z_own", "altman_z_finstat", "taffler_t")),
+    ("Aktivita a kreditné modely",  ("act_asset_turnover", "altman_z_own", "altman_z_finstat")),
 ]
 
 

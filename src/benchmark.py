@@ -9,7 +9,7 @@ RATIO_COLS = (
     "dbt_total", "dbt_equity_ratio", "dbt_debt_equity",
     "prof_roa", "prof_roe", "prof_ros", "prof_ebitda_margin",
     "act_asset_turnover",
-    "altman_z_own", "altman_z_finstat", "taffler_t",
+    "altman_z_own", "altman_z_finstat",
 )
 
 
