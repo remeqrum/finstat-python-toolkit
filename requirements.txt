@@ -1,8 +1,9 @@
-pandas
-numpy
-matplotlib
-seaborn
-openpyxl
-jinja2
-streamlit
-pyarrow
+pandas==3.0.2
+numpy==2.4.4
+matplotlib==3.10.9
+seaborn==0.13.2
+openpyxl==3.1.5
+jinja2==3.1.6
+streamlit==1.57.0
+pyarrow==24.0.0
+playwright>=1.40
