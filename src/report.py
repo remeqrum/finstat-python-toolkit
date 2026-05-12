@@ -8,10 +8,11 @@ Pouzitie:
 """
 
 import argparse
+import sys
 from pathlib import Path
 
 import pandas as pd
-from jinja2 import Environment, FileSystemLoader, select_autoescape
+from jinja2 import Environment, FileSystemLoader, TemplateNotFound, select_autoescape
 from openpyxl import Workbook
 from openpyxl.chart import BarChart, Reference
 from openpyxl.chart.label import DataLabelList
@@ -265,7 +266,15 @@ def main():
     if not args.no_html:
         fmts.append("html")
 
-    paths = generate_report(args.ico, tuple(fmts), args.output)
+    try:
+        paths = generate_report(args.ico, tuple(fmts), args.output)
+    except KeyError as e:
+        print(f"Chyba: {e}", file=sys.stderr)
+        sys.exit(1)
+    except TemplateNotFound as e:
+        print(f"Chyba: HTML sablona nebola najdena ({e.name}).", file=sys.stderr)
+        sys.exit(1)
+
     for p in paths:
         print(f"Uložené: {p}")
 
